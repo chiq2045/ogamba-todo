@@ -2731,6 +2731,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-stately/data@npm:^3.8.1":
+  version: 3.8.1
+  resolution: "@react-stately/data@npm:3.8.1"
+  dependencies:
+    "@react-types/shared": ^3.16.0
+    "@swc/helpers": ^0.4.14
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
+  checksum: a7af28db364daf23508549d520aaa0b2842109f05495b7612a185237453c79afdbff47c3ac11a2b15f2a8c4359a8f6f96193188592ffb10559944c9d80e6e351
+  languageName: node
+  linkType: hard
+
 "@react-stately/datepicker@npm:^3.2.1":
   version: 3.2.1
   resolution: "@react-stately/datepicker@npm:3.2.1"
@@ -8827,6 +8839,7 @@ __metadata:
     react-aria: ^3.22.0
     react-dom: ^18.2.0
     react-router-dom: ^6.6.1
+    react-stately: ^3.20.0
     ts-loader: ^9.4.2
     ts-node: ^10.9.1
     tsconfig-paths-webpack-plugin: ^4.0.0
@@ -9500,6 +9513,38 @@ __metadata:
   peerDependencies:
     react: ">=16.8"
   checksum: 58f0ad29123e2854d547915a1ae1cc2687504e396d71db50fe8f36ad733d7940a2914d45868a8478b6138536e119fa5e3303212b7c7b1d81d80cd5b0bbefdfa2
+  languageName: node
+  linkType: hard
+
+"react-stately@npm:^3.20.0":
+  version: 3.20.0
+  resolution: "react-stately@npm:3.20.0"
+  dependencies:
+    "@react-stately/calendar": ^3.0.5
+    "@react-stately/checkbox": ^3.3.2
+    "@react-stately/collections": ^3.5.1
+    "@react-stately/combobox": ^3.3.1
+    "@react-stately/data": ^3.8.1
+    "@react-stately/datepicker": ^3.2.1
+    "@react-stately/dnd": ^3.0.1
+    "@react-stately/list": ^3.6.1
+    "@react-stately/menu": ^3.4.4
+    "@react-stately/numberfield": ^3.3.1
+    "@react-stately/overlays": ^3.4.4
+    "@react-stately/radio": ^3.6.2
+    "@react-stately/searchfield": ^3.3.4
+    "@react-stately/select": ^3.3.4
+    "@react-stately/selection": ^3.11.2
+    "@react-stately/slider": ^3.2.4
+    "@react-stately/table": ^3.7.0
+    "@react-stately/tabs": ^3.2.4
+    "@react-stately/toggle": ^3.4.4
+    "@react-stately/tooltip": ^3.2.4
+    "@react-stately/tree": ^3.4.1
+    "@react-types/shared": ^3.16.0
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
+  checksum: 3537e792d8aa33651096d567f00e59c3ea3ceca0b0036092839adc821f447524a0a7ae19ca86c59f61def98542210508d795a6c05fa783a7e3daa52c9356cead
   languageName: node
   linkType: hard
 
