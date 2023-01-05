@@ -1,9 +1,12 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { ErrorPage } from './components/error-page';
+import { Root } from './routes/root';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <h1>To Dos</h1>,
+    element: <Root />,
+    errorElement: <ErrorPage />,
   },
 ]);
 
