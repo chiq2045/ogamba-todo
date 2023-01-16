@@ -1,15 +1,15 @@
-import { HTMLAttributes, useRef } from 'react';
+import { useRef } from 'react';
 import { useSearchFieldState } from 'react-stately';
 import { AriaSearchFieldProps, useSearchField } from 'react-aria';
 
 export const SearchField = (props: {
-  input: HTMLAttributes<HTMLInputElement>;
-  label: HTMLAttributes<HTMLLabelElement>;
+  input: AriaSearchFieldProps;
+  label: AriaSearchFieldProps['label'];
 }) => {
   const { label, input } = props;
   const searchFieldProps = {
     ...input,
-    label: label.children,
+    label,
   } as AriaSearchFieldProps;
   const state = useSearchFieldState(searchFieldProps);
   const ref = useRef<HTMLInputElement>(null);
@@ -20,7 +20,7 @@ export const SearchField = (props: {
   );
   return (
     <div>
-      <label {...labelProps}>{label.children}</label>
+      <label {...labelProps}>{label}</label>
       <input {...inputProps} ref={ref} />
     </div>
   );

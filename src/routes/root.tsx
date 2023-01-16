@@ -1,33 +1,74 @@
-import { ChangeEventHandler, useState } from 'react';
+import { useMemo, useState } from 'react';
+import { useDebounce } from 'usehooks-ts';
 import { AppBar } from 'src/components/app-bar';
 import { SearchField } from 'src/components/search-field';
+import { Todo } from 'src/components/todo';
+import { Todos } from 'src/components/todos';
+import { Todo as TodoType } from 'types';
 
-export const Root = () => {
+const todos: TodoType[] = [
+  {
+    title: 'Grades - add google sheets',
+    content:
+      'Use the google sheets api so that users can connect students to data',
+    dueDate: Date.now(),
+    id: 1,
+  },
+  {
+    title: 'Grades - unique student ids',
+    content:
+      'Each student needs a recreatable unique id that will connect them to the grades',
+    dueDate: Date.now(),
+    id: 2,
+  },
+  {
+    title: 'Test',
+    content: 'This is a test todo',
+    dueDate: Date.now(),
+    id: 3,
+  },
+];
+
+const useRoot = () => {
   const [searchValue, setSeachValue] = useState('');
 
-  const handleSearch: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setSeachValue(e.target.value);
+  const debouncedSearch = useDebounce(searchValue, 500);
+
+  const handleSearch = (value: string) => {
+    setSeachValue(value);
   };
 
-  console.log(searchValue);
+  const filteredTodos = todos.filter(
+    (todo) =>
+      todo.content.includes(debouncedSearch) ||
+      todo.title.includes(debouncedSearch)
+  );
+  return {
+    filteredTodos,
+    handleSearch,
+  };
+};
+
+export const Root = () => {
+  const { handleSearch, filteredTodos } = useRoot();
 
   return (
     <div>
       <header>
-        <AppBar handleSearch={handleSearch} searchValue={searchValue} />
+        <AppBar />
       </header>
       <main className='content'>
         <div>
           <SearchField
-            label={{ children: 'search' }}
+            label='Search'
             input={{ placeholder: 'Search', onChange: handleSearch }}
           />
         </div>
-        <div>
-          <ul>
-            <li>To Do 1</li>
-          </ul>
-        </div>
+        <Todos>
+          {filteredTodos.map((todo) => (
+            <Todo key={todo.id} todo={todo} />
+          ))}
+        </Todos>
       </main>
     </div>
   );

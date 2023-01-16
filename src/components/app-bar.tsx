@@ -1,13 +1,6 @@
-import { ChangeEventHandler } from 'react';
 import { Link } from 'react-router-dom';
 
-export const AppBar = ({
-  handleSearch,
-  searchValue,
-}: {
-  handleSearch: ChangeEventHandler;
-  searchValue: string;
-}) => {
+export const AppBar = () => {
   return (
     <nav className='header header-animated'>
       <div className='header-brand'>
