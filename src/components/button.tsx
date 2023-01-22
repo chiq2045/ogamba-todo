@@ -9,7 +9,7 @@ export const Button = (
   const { children, className } = props;
 
   return (
-    <button {...buttonProps} className={`btn-dark ${className}`} ref={ref}>
+    <button {...buttonProps} className={`mb-0 ${className}`} ref={ref}>
       {children}
     </button>
   );
