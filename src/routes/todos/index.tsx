@@ -28,6 +28,26 @@ export const TodosPage = () => {
             input={{ onChange: handleSearch }}
           />
         </div>
+        <div className='u-flex-grow-0'>
+          <div className='u-flex u-gap-1'>
+            <Button
+              className='tooltip'
+              data-tooltip='Filter Todos'
+              onClick={() => alert('filter WIP')}
+              aria-label='filter todos'
+            >
+              <i className='fa fa-wrapper fa-solid fa-filter' />
+            </Button>
+            <Button
+              className='tooltip'
+              data-tooltip='Sort Todos'
+              onClick={() => alert('sort WIP')}
+              aria-label='sort todos'
+            >
+              <i className='fa fa-wrapper fa-solid fa-sort' />
+            </Button>
+          </div>
+        </div>
       </div>
       <Todos>
         {filteredTodos.map(([key, todo]) => (
