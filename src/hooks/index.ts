@@ -1,5 +1,6 @@
 import { Key, useEffect, useState } from 'react';
 import { useDebounce } from 'usehooks-ts';
+import { v4 as uuid } from 'uuid';
 import { Todo } from 'types';
 
 export const useTodos = () => {
@@ -10,6 +11,22 @@ export const useTodos = () => {
     const newTodos = new Map<Key, Todo>();
 
     setTodos(newTodos);
+  };
+
+  const addTodo = (newTodo: Pick<Todo, 'title' | 'content'>) => {
+    const id = uuid();
+    setTodos((v) => {
+      const todo = new Map(v);
+      todo.set(id, {
+        ...newTodo,
+        id,
+        completed: false,
+        working: false,
+        timeTaken: 0,
+      });
+
+      return todo;
+    });
   };
 
   const updateTodo = (todo: Todo) => {
@@ -75,6 +92,7 @@ export const useTodos = () => {
     filteredTodos,
     handleSearch,
     updateTodo,
+    addTodo,
     handleUpdateComplete,
     handleUpdateTimeTaken,
   };

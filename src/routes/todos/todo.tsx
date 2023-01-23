@@ -7,8 +7,8 @@ export const Todo = ({ todo }: { todo: TodoType }) => {
         <div className='tile-avatar'>
           <span className='icon'>
             <i
-              className={`fa fa-wrapper fa-duotone fa-badge-${
-                todo.completed ? 'check' : ''
+              className={`fa fa-wrapper fa-solid fa-square-${
+                todo.completed ? 'check' : 'xmark'
               }`}
             />
           </span>

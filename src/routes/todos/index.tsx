@@ -5,8 +5,11 @@ import { useTodos } from 'src/hooks';
 import { Todo } from './todo';
 import { Todos } from './todos';
 
-export const TodosPage = () => {
-  const { filteredTodos, handleSearch } = useTodos();
+interface Props {
+  filteredTodos: ReturnType<typeof useTodos>['filteredTodos'];
+  handleSearch: ReturnType<typeof useTodos>['handleSearch'];
+}
+export const TodosPage = (props: Props) => {
   const navigate = useNavigate();
 
   return (
@@ -16,7 +19,7 @@ export const TodosPage = () => {
           <Button
             className='tooltip'
             data-tooltip='Add Todo'
-            onClick={() => navigate('/todos/add')}
+            onClick={() => navigate('/add')}
             aria-label='add todo'
           >
             <i className='fa fa-wrapper fa-solid fa-plus' />
@@ -25,7 +28,7 @@ export const TodosPage = () => {
         <div className='u-flex-grow-1'>
           <SearchField
             label='Search Todos'
-            input={{ onChange: handleSearch }}
+            input={{ onChange: props.handleSearch }}
           />
         </div>
         <div className='u-flex-grow-0'>
@@ -50,7 +53,7 @@ export const TodosPage = () => {
         </div>
       </div>
       <Todos>
-        {filteredTodos.map(([key, todo]) => (
+        {props.filteredTodos.map(([key, todo]) => (
           <Todo key={key} todo={todo} />
         ))}
       </Todos>
