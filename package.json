@@ -7,6 +7,7 @@
     "@react-types/textfield": "^3.6.2",
     "@remix-run/router": "^1.2.1",
     "@types/uuid": "^9.0.0",
+    "axios": "^1.2.4",
     "cirrus-ui": "^0.7.1",
     "dotenv": "^16.0.3",
     "koa": "^2.14.1",

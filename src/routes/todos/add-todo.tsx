@@ -11,13 +11,15 @@ interface Props {
 export const AddTodo = (props: Props) => {
   const [title, setTitle] = useState<Todo['title']>('');
   const [content, setContent] = useState<Todo['content']>('');
+  const [tags, setTags] = useState('');
 
   const navigate = useNavigate();
 
   const handleChangeTitle = (value: string) => setTitle(value);
   const handleChangeContent = (value: string) => setContent(value);
+  const handleChangeTags = (value: string) => setTags(value);
   const handleSubmit = () => {
-    props.addTodo({ title, content });
+    props.addTodo({ title, content, tags: [tags] });
     navigate('/');
   };
 
@@ -27,6 +29,7 @@ export const AddTodo = (props: Props) => {
       <form>
         <TextField label='Title' onChange={handleChangeTitle} />
         <TextArea label='Content' onChange={handleChangeContent} />
+        <TextField label='Tags' onChange={handleChangeTags} />
         <Button type='submit' onClick={handleSubmit}>
           Submit
         </Button>

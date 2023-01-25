@@ -1,76 +1,65 @@
 import { Key, useEffect, useState } from 'react';
 import { useDebounce } from 'usehooks-ts';
-import { v4 as uuid } from 'uuid';
+import axios from 'axios';
 import { Todo } from 'types';
+import { backendUrl } from 'src/utils/indext';
 
 export const useTodos = () => {
   const [searchValue, setSeachValue] = useState('');
   const [todos, setTodos] = useState(new Map<Key, Todo>());
+  const [loading, setLoading] = useState(false);
 
-  const initializeTodos = () => {
-    const newTodos = new Map<Key, Todo>();
+  const controller = new AbortController();
 
-    setTodos(newTodos);
+  const startLoading = () => {
+    setLoading(true);
   };
 
-  const addTodo = (newTodo: Pick<Todo, 'title' | 'content'>) => {
-    const id = uuid();
-    setTodos((v) => {
-      const todo = new Map(v);
-      todo.set(id, {
-        ...newTodo,
-        id,
-        completed: false,
-        working: false,
-        timeTaken: 0,
-        tags: [],
-      });
-
-      return todo;
-    });
+  const stopLoading = () => {
+    setLoading(false);
   };
 
-  const updateTodo = (todo: Todo) => {
-    setTodos((v) => {
-      const updatedTodos = new Map(v);
-      updatedTodos.set(todo.id, todo);
-
-      return updatedTodos;
-    });
+  const getTodos = () => {
+    startLoading();
+    axios
+      .get<Todo[]>(backendUrl, { signal: controller.signal })
+      .then((res) => {
+        const newTodos = new Map<Key, Todo>();
+        res.data.forEach((todo) => {
+          newTodos.set(todo.id, todo);
+        });
+        setTodos(newTodos);
+      })
+      .catch((e) => console.error(e))
+      .finally(stopLoading);
   };
 
-  const handleUpdateComplete = (todoId: Todo['id']) => {
-    setTodos((v) => {
-      const todo = v.get(todoId);
-
-      if (!todo) {
-        return v;
-      }
-
-      const updatedTodos = new Map(v);
-      updatedTodos.set(todoId, { ...todo, completed: !todo.completed });
-
-      return updatedTodos;
-    });
+  const cancelRequest = () => {
+    controller.abort();
   };
 
-  const handleUpdateTimeTaken = (todoId: Todo['id'], timeTaken: number) => {
-    setTodos((v) => {
-      const todo = v.get(todoId);
+  const addTodo = (newTodo: Pick<Todo, 'title' | 'content' | 'tags'>) => {
+    startLoading();
+    axios
+      .post(backendUrl, newTodo)
+      .catch((e) => console.error(e))
+      .finally(stopLoading);
+  };
 
-      if (!todo) {
-        return v;
-      }
+  const updateTodo = (updatedTodo: Todo) => {
+    startLoading();
+    axios
+      .put(`${backendUrl}/${updatedTodo.id}`, updatedTodo)
+      .catch((e) => console.error(e))
+      .finally(stopLoading);
+  };
 
-      const updatedTodos = new Map(v);
-      if (!todo.working) {
-        updatedTodos.set(todoId, { ...todo, working: true });
-      }
-
-      updatedTodos.set(todoId, { ...todo, timeTaken });
-
-      return updatedTodos;
-    });
+  const deleteTodo = (deletedTodoId: Todo['id']) => {
+    startLoading();
+    axios
+      .delete(`${backendUrl}/${deletedTodoId}`)
+      .catch((e) => console.error(e))
+      .finally(stopLoading);
   };
 
   const debouncedSearch = useDebounce(searchValue, 500);
@@ -85,16 +74,14 @@ export const useTodos = () => {
       todo.title.includes(debouncedSearch)
   );
 
-  useEffect(() => {
-    initializeTodos();
-  }, []);
-
   return {
     filteredTodos,
     handleSearch,
     updateTodo,
     addTodo,
-    handleUpdateComplete,
-    handleUpdateTimeTaken,
+    cancelRequest,
+    getTodos,
+    loading,
+    deleteTodo,
   };
 };
