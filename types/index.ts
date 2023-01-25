@@ -7,4 +7,5 @@ export type Todo = {
   timeTaken: number;
   title: string;
   working: boolean;
+  tags: string[];
 };

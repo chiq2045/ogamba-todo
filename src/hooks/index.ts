@@ -23,6 +23,7 @@ export const useTodos = () => {
         completed: false,
         working: false,
         timeTaken: 0,
+        tags: [],
       });
 
       return todo;

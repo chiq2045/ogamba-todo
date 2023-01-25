@@ -17,9 +17,10 @@
     "baseUrl": "./",
     "paths": {
       "types": ["types"],
-      "src": ["src"]
+      "src": ["src"],
+      "app": ["app"]
     }
   },
-  "include": ["src/**/*", "types/**/*"],
+  "include": ["src/**/*", "app/**/*", "types/**/*"],
   "exclude": ["dist"]
 }
