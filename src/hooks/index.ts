@@ -1,8 +1,8 @@
-import { Key, useEffect, useState } from 'react';
+import { Key, useState } from 'react';
 import { useDebounce } from 'usehooks-ts';
 import axios from 'axios';
 import { Todo } from 'types';
-import { backendUrl } from 'src/utils/indext';
+import { backendUrl } from 'src/utils';
 
 export const useTodos = () => {
   const [searchValue, setSeachValue] = useState('');

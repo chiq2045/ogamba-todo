@@ -1,18 +1,46 @@
-import { useNavigate } from 'react-router-dom';
+import { Key, useState } from 'react';
+import { useLoaderData, useNavigate, useNavigation } from 'react-router-dom';
+import { useDebounce } from 'usehooks-ts';
 import { Button } from 'src/components/button';
 import { SearchField } from 'src/components/search-field';
-import { useTodos } from 'src/hooks';
+import { backendUrl } from 'src/utils';
+import { Todo as TodoType } from 'types';
 import { Todo } from './todo';
 import { Todos } from './todos';
+import { Loader } from 'src/components/loader';
 
-interface Props {
-  filteredTodos: ReturnType<typeof useTodos>['filteredTodos'];
-  handleSearch: ReturnType<typeof useTodos>['handleSearch'];
-}
-export const TodosPage = (props: Props) => {
+export const todosLoader = async () => {
+  const todos = new Map<Key, TodoType>();
+  const response = await fetch(backendUrl);
+  const responseData = await response.json();
+  (responseData.data as TodoType[]).forEach((todo) => {
+    todos.set(todo.id, todo);
+  });
+  return todos;
+};
+
+export const TodosPage = () => {
+  const [searchValue, setSeachValue] = useState('');
+  const todos = useLoaderData() as unknown as Map<Key, TodoType>;
+
   const navigate = useNavigate();
+  const navigation = useNavigation();
 
-  return (
+  const debouncedSearch = useDebounce(searchValue, 500);
+
+  const handleSearch = (value: string) => {
+    setSeachValue(value);
+  };
+
+  const filteredTodos = [...todos].filter(
+    ([, todo]) =>
+      todo.content.includes(debouncedSearch) ||
+      todo.title.includes(debouncedSearch)
+  );
+
+  return navigation.state === 'loading' ? (
+    <Loader />
+  ) : (
     <div className='u-flex u-flex-column'>
       <div className='u-flex u-gap-4 u-round-xs u-items-flex-end'>
         <div className='u-flex-grow-0'>
@@ -28,7 +56,7 @@ export const TodosPage = (props: Props) => {
         <div className='u-flex-grow-1'>
           <SearchField
             label='Search Todos'
-            input={{ onChange: props.handleSearch }}
+            input={{ onChange: handleSearch }}
           />
         </div>
         <div className='u-flex-grow-0'>
@@ -53,7 +81,7 @@ export const TodosPage = (props: Props) => {
         </div>
       </div>
       <Todos>
-        {props.filteredTodos.map(([key, todo]) => (
+        {filteredTodos.map(([key, todo]) => (
           <Todo key={key} todo={todo} />
         ))}
       </Todos>

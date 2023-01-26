@@ -2,13 +2,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'src/components/button';
 import { TextArea, TextField } from 'src/components/text-field';
-import { useTodos } from 'src/hooks';
 import { Todo } from 'types';
 
-interface Props {
-  addTodo: ReturnType<typeof useTodos>['addTodo'];
-}
-export const AddTodo = (props: Props) => {
+export const AddTodo = () => {
   const [title, setTitle] = useState<Todo['title']>('');
   const [content, setContent] = useState<Todo['content']>('');
   const [tags, setTags] = useState('');
@@ -19,7 +15,7 @@ export const AddTodo = (props: Props) => {
   const handleChangeContent = (value: string) => setContent(value);
   const handleChangeTags = (value: string) => setTags(value);
   const handleSubmit = () => {
-    props.addTodo({ title, content, tags: [tags] });
+    // props.addTodo({ title, content, tags: [tags] });
     navigate('/');
   };
 
