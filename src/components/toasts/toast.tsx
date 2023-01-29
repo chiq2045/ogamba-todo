@@ -13,7 +13,7 @@ export const Toast = ({ toast, onClose, index }: Props) => {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       onClose();
-    }, timeout ?? 5000);
+    }, timeout ?? 10000);
 
     return () => clearTimeout(timeoutId);
   }, []);
