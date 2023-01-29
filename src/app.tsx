@@ -1,4 +1,5 @@
-import { useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
+import { Toast } from 'types';
 import { AppBar } from './components/app-bar';
 import { Loader } from './components/loader';
 import { Toasts } from './components/toasts';
@@ -13,7 +14,25 @@ import { Todos } from './views/todos';
 
 export const App = () => {
   const [toasts, toastsDispatch] = useReducer(toastsReducer, initialToasts);
-  const { filteredTodos: todos, handleSearch, loading } = useTodos();
+  const addToast = (toast: Omit<Toast, 'id'>) => {
+    toastsDispatch({ toast, type: 'add' });
+  };
+
+  const {
+    filteredTodos: todos,
+    handleSearch,
+    loading,
+    getTodos,
+  } = useTodos(addToast);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    getTodos(controller.signal);
+
+    return () => {
+      controller.abort();
+    };
+  }, []);
 
   return (
     <ToastsContext.Provider value={toasts}>
