@@ -1,8 +1,15 @@
+import { config } from 'dotenv';
 import Router from '@koa/router';
-import { db } from './database';
+import { prodDb, devDb } from './database';
 import koaBody from 'koa-body';
 import { ObjectId } from 'mongodb';
 import { Todo } from 'types';
+
+config();
+
+const { NODE_ENV: nodeEnv = 'development' } = process.env;
+
+const db = nodeEnv === 'development' ? devDb : prodDb;
 
 const todoRouter = new Router({
   prefix: '/todos',

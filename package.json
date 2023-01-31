@@ -13,6 +13,7 @@
     "koa-json": "^2.0.2",
     "koa-logger": "^3.2.1",
     "mongodb": "^4.13.0",
+    "mongodb-memory-server": "^8.11.4",
     "nanoid": "^4.0.0",
     "react": "^18.2.0",
     "react-aria": "^3.22.0",
@@ -69,5 +70,16 @@
     "postinstall": "husky install",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable"
+  },
+  "dependenciesMeta": {
+    "prettier@2.8.3": {
+      "unplugged": true
+    },
+    "react-aria@3.22.0": {
+      "unplugged": true
+    },
+    "react-stately@3.20.0": {
+      "unplugged": true
+    }
   }
 }
