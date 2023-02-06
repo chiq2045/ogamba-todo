@@ -29,9 +29,14 @@ export const Toast = ({ toast, onClose, index }: Props) => {
         width: '40%',
         maxHeight: '40vh',
       }}
+      role='region'
+      aria-labelledby='toast-title'
+      aria-live='polite'
     >
       <button className='btn-close' onClick={onClose} />
-      {title ? <p className='toast--title title'>{title}</p> : null}
+      <h2 className='toast--title title' aria-labelledby='toast-title'>
+        {title}
+      </h2>
       <p>{value}</p>
       {moreDetails ? (
         <details className='u-round-xs p-1' style={{ border: '1px solid' }}>

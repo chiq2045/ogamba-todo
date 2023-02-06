@@ -5,17 +5,19 @@ import { Toast } from './toast';
 export const Toasts = () => {
   const toasts = useContext(ToastsContext);
   const dispatch = useContext(ToastsDispatchContext);
+  const topToast = toasts.size > 0 ? [...toasts][0] : null;
 
-  const showToast = (toast: (typeof toasts)[number], index: number) => {
-    return (
-      <Toast
-        key={toast.id}
-        onClose={() => dispatch({ id: toast.id, type: 'remove' })}
-        index={index}
-        toast={toast}
-      />
-    );
-  };
-
-  return <div>{toasts.map(showToast)}</div>;
+  console.log(topToast);
+  return (
+    <div>
+      {topToast ? (
+        <Toast
+          key={topToast[0]}
+          onClose={() => dispatch({ id: topToast[0], type: 'remove' })}
+          index={0}
+          toast={topToast[1]}
+        />
+      ) : null}
+    </div>
+  );
 };

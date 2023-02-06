@@ -2,24 +2,38 @@ import { createContext, Dispatch } from 'react';
 import { Toast, ToastAction } from 'types';
 import { nanoid } from 'nanoid';
 
-export const ToastsContext = createContext<Toast[]>([]);
+export const ToastsContext = createContext(new Map<string, Toast>());
 export const ToastsDispatchContext = createContext<Dispatch<ToastAction>>(
   () => ({ type: '' })
 );
 
-export const toastsReducer = (toasts: Toast[], action: ToastAction) => {
+export const toastsReducer = (
+  toasts: Map<string, Toast>,
+  action: ToastAction
+) => {
+  const updatedToasts = new Map(toasts);
+
   switch (action.type) {
     case 'add': {
-      return action.toast
-        ? [...toasts, { ...action.toast, id: nanoid() }]
-        : [...toasts];
+      if (action.toast) {
+        updatedToasts.set(nanoid(), action.toast);
+      }
+
+      break;
     }
     case 'remove': {
-      return [...toasts].filter((toast) => toast.id !== action.id);
+      console.log(action, updatedToasts.entries());
+      if (action.id && updatedToasts.has(action.id)) {
+        updatedToasts.delete(action.id);
+      }
+
+      break;
     }
     default:
-      return [...toasts];
   }
+
+  console.log('updated', [...updatedToasts], [...toasts]);
+  return updatedToasts;
 };
 
-export const initialToasts: Toast[] = [];
+export const initialToasts = new Map<string, Toast>();

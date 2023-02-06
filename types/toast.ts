@@ -1,8 +1,7 @@
 export type Toast = {
   moreDetails?: object;
-  id: string;
   timeout?: number;
-  title?: string;
+  title: string;
   type?: Color;
   value: string;
 };
@@ -20,6 +19,6 @@ export type Color =
 
 export type ToastAction = {
   type: 'add' | 'remove' | '';
-  id?: Toast['id'];
-  toast?: Omit<Toast, 'id'>;
+  id?: string;
+  toast?: Toast;
 };

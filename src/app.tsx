@@ -14,7 +14,7 @@ import { Todos } from './views/todos';
 
 export const App = () => {
   const [toasts, toastsDispatch] = useReducer(toastsReducer, initialToasts);
-  const addToast = (toast: Omit<Toast, 'id'>) => {
+  const addToast = (toast: Toast) => {
     toastsDispatch({ toast, type: 'add' });
   };
 
