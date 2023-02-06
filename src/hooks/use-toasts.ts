@@ -32,7 +32,6 @@ export const toastsReducer = (
     default:
   }
 
-  console.log('updated', [...updatedToasts], [...toasts]);
   return updatedToasts;
 };
 

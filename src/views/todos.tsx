@@ -1,18 +1,19 @@
+import { ReactNode } from 'react';
 import { Button } from 'src/components/button';
 import { SearchField } from 'src/components/inputs/search-field';
 import { useTodos } from 'src/hooks';
 
 type TodoTypes = ReturnType<typeof useTodos>;
 interface Props {
-  todos: TodoTypes['filteredTodos'];
   handleSearch: TodoTypes['handleSearch'];
+  children: ReactNode;
 }
 export const Todos = (props: Props) => {
   const { handleSearch } = props;
 
   return (
-    <div className='u-flex u-flex-column'>
-      <div className='u-flex u-gap-4 u-round-xs u-items-flex-end'>
+    <div className='u-flex u-flex-column u-gap-2'>
+      <div className='u-flex u-gap-2 u-round-xs u-items-flex-end'>
         <div className='u-flex-grow-0'>
           <Button
             className='tooltip'
@@ -50,6 +51,7 @@ export const Todos = (props: Props) => {
           </div>
         </div>
       </div>
+      {props.children}
     </div>
   );
 };

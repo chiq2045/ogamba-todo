@@ -3,6 +3,7 @@ import { Toast } from 'types';
 import { AppBar } from './components/app-bar';
 import { Loader } from './components/loader';
 import { Toasts } from './components/toasts';
+import { Todo } from './components/todo';
 import { useTodos } from './hooks';
 import {
   initialToasts,
@@ -34,6 +35,7 @@ export const App = () => {
     };
   }, []);
 
+  console.log(todos);
   return (
     <ToastsContext.Provider value={toasts}>
       <ToastsDispatchContext.Provider value={toastsDispatch}>
@@ -41,7 +43,15 @@ export const App = () => {
           <AppBar />
         </header>
         <main className='content'>
-          {loading ? <Loader /> : <Todos {...{ todos, handleSearch }} />}
+          {loading ? (
+            <Loader />
+          ) : (
+            <Todos handleSearch={handleSearch}>
+              {[...todos].map(([id, todo]) => (
+                <Todo key={id} todo={todo} />
+              ))}
+            </Todos>
+          )}
           <Toasts />
         </main>
       </ToastsDispatchContext.Provider>

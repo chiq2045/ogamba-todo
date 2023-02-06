@@ -33,7 +33,6 @@ export const useTodos = (addToast: (toast: Omit<Toast, 'id'>) => void) => {
           title: 'Error',
           moreDetails: e,
           value: 'Could not get todos',
-          timeout: 100000,
           type: 'danger',
         });
       })
@@ -44,30 +43,56 @@ export const useTodos = (addToast: (toast: Omit<Toast, 'id'>) => void) => {
     return todos.get(id);
   };
 
-  // const addTodo = (newTodo: Pick<Todo, 'title' | 'content' | 'tags'>) => {
-  //   startLoading();
-  //   axios
-  //     .post(backendUrl, newTodo)
-  //     .catch((e) => console.error(e))
-  //     .finally(stopLoading);
-  // };
-  //
-  // const updateTodo = (updatedTodo: Todo) => {
-  //   startLoading();
-  //   axios
-  //     .put(`${backendUrl}/${updatedTodo.id}`, updatedTodo)
-  //     .catch((e) => console.error(e))
-  //     .finally(stopLoading);
-  // };
-  //
-  // const deleteTodo = (deletedTodoId: Todo['id']) => {
-  //   startLoading();
-  //   axios
-  //     .delete(`${backendUrl}/${deletedTodoId}`)
-  //     .catch((e) => console.error(e))
-  //     .finally(stopLoading);
-  // };
-  //
+  const addTodo = (newTodo: Pick<Todo, 'title' | 'content' | 'tags'>) => {
+    startLoading();
+    fetch(backendUrl, {
+      method: 'post',
+      body: JSON.stringify(newTodo),
+    })
+      .catch((e) => {
+        addToast({
+          title: 'Error',
+          moreDetails: e,
+          value: 'Could not get todos',
+          type: 'danger',
+        });
+      })
+      .finally(stopLoading);
+  };
+
+  const updateTodo = (updatedTodo: Todo) => {
+    startLoading();
+    fetch(`${backendUrl}/${updatedTodo.id}`, {
+      method: 'put',
+      body: JSON.stringify(updatedTodo),
+    })
+      .catch((e) => {
+        addToast({
+          title: 'Error',
+          moreDetails: e,
+          value: 'Could not get todos',
+          type: 'danger',
+        });
+      })
+      .finally(stopLoading);
+  };
+
+  const deleteTodo = (deletedTodoId: Todo['id']) => {
+    startLoading();
+    fetch(`${backendUrl}/${deletedTodoId}`, {
+      method: 'delete',
+    })
+      .catch((e) => {
+        addToast({
+          title: 'Error',
+          moreDetails: e,
+          value: 'Could not get todos',
+          type: 'danger',
+        });
+      })
+      .finally(stopLoading);
+  };
+
   const debouncedSearch = useDebounce(searchValue, 500);
 
   const handleSearch = (value: string) => {
@@ -83,11 +108,11 @@ export const useTodos = (addToast: (toast: Omit<Toast, 'id'>) => void) => {
   return {
     filteredTodos,
     handleSearch,
-    // updateTodo,
-    // addTodo,
+    updateTodo,
+    addTodo,
     getTodos,
     getTodo,
     loading,
-    // deleteTodo,
+    deleteTodo,
   };
 };

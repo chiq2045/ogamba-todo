@@ -34,7 +34,7 @@ export const Toast = ({ toast, onClose, index }: Props) => {
       aria-live='polite'
     >
       <button className='btn-close' onClick={onClose} />
-      <h2 className='toast--title title' aria-labelledby='toast-title'>
+      <h2 className='toast--title title text-md' aria-labelledby='toast-title'>
         {title}
       </h2>
       <p>{value}</p>

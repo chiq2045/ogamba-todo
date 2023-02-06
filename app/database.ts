@@ -23,11 +23,7 @@ export const devDb = async () => {
     await client.connect();
     database = client.db();
 
-    await database
-      .collection('hello')
-      .insertOne({ id: 0, message: 'Hello World' });
-
-    await database.collection('instruments').insertMany([
+    await database.collection('todos').insertMany([
       {
         completed: false,
         content: 'This is a test',
