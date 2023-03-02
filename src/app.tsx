@@ -23,6 +23,14 @@ const todoData: Todo[] = [
     completed: false,
   },
 ];
+
+const TodoTile: typeof Tile = (props) => (
+  <Tile
+    {...props}
+    className='p-2 mb-1 u-shadow-md w-100p u-round-lg bg-blue-200'
+  />
+);
+
 export const App = () => {
   const [todos, setTodos] = useState(
     new Map(todoData.map((todo) => [todo.id, todo]))
@@ -70,49 +78,45 @@ export const App = () => {
           <h1>Todo List</h1>
           <Button onClick={startAddTodo}>Add Todo</Button>
           {addingTodo ? (
-            <Tile
-              p={{ p: 2 }}
-              m={{ mb: 1 }}
-              shadow='md'
-              className='w-100p u-round-lg bg-blue-200'
-            >
+            <TodoTile>
               <TileContainer>
-                <div className='input-control row level'>
-                  <div className='col-xs-3 level-item'>
+                <Flex alignItems='center'>
+                  <div className='u-flex-grow-0 pr-2'>
                     <label>New Todo Title</label>
                   </div>
-                  <div className='lcol-xs-9 evel-item'>
+                  <div className='u-flex-grow-1 pr-4'>
                     <input
                       type='text'
                       value={newTodo}
                       onChange={(e) => handleNewTodo(e.target.value)}
                     />
                   </div>
-                </div>
+                  <div className='u-flex-grow-0'>
+                    <Button
+                      className='m-0 bg-blue-700 text-white'
+                      onClick={handleAddTodo}
+                    >
+                      Submit
+                    </Button>
+                  </div>
+                </Flex>
               </TileContainer>
-              <TileButtons>
-                <Button onClick={handleAddTodo}>Submit</Button>
-              </TileButtons>
-            </Tile>
+            </TodoTile>
           ) : null}
           <ul className='no-bullets m-0 p-0'>
             {[...todos].map(([id, todo]) => (
               <li key={id}>
-                <Tile
-                  p={{ p: 2 }}
-                  m={{ mb: 1 }}
-                  shadow='md'
-                  className='w-100p u-round-lg bg-blue-200'
-                >
+                <TodoTile>
                   <TileContainer>
                     <TileTitle>{todo.title}</TileTitle>
                   </TileContainer>
                   <TileButtons>
                     <CheckBox
-                      color='primary'
-                      labelText={todo.completed ? 'Completed' : 'Incomplete'}
-                      onChange={() => handleToggleTodoCompleted(id)}
-                      defaultChecked={todo.completed}
+                      inputProps={{
+                        onChange: () => handleToggleTodoCompleted(id),
+                        defaultChecked: todo.completed,
+                      }}
+                      labelProps={{}}
                     />
                     <span className='sr-only'>
                       {todo.completed
@@ -120,7 +124,7 @@ export const App = () => {
                         : 'Check to complete todo'}
                     </span>
                   </TileButtons>
-                </Tile>
+                </TodoTile>
               </li>
             ))}
           </ul>

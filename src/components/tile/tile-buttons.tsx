@@ -1,18 +1,13 @@
-import { ReactNode } from 'react';
-import { getMargin, getPadding } from '~src/helpers';
-import { Margin, Padding } from '~types';
+import { HTMLAttributes } from 'react';
 
-interface Props {
-  children: ReactNode;
-  m?: Margin;
-  p?: Padding;
-}
-export const TileButtons = (props: Props) => {
-  const className = `
-    tile__buttons
-    ${getMargin(props.m)}
-    ${getPadding(props.p)}
-  `;
-
-  return <div {...{ className }}>{props.children}</div>;
+export const TileButtons = ({
+  children,
+  className,
+  ...props
+}: HTMLAttributes<HTMLDivElement>) => {
+  return (
+    <div {...{ className: `tile__buttons ${className}`, ...props }}>
+      {children}
+    </div>
+  );
 };

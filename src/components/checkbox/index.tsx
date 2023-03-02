@@ -1,35 +1,27 @@
 import { HTMLAttributes, useId } from 'react';
 
-interface Props extends HTMLAttributes<HTMLInputElement> {
-  color?:
-    | 'transparent'
-    | 'light'
-    | 'dark'
-    | 'black'
-    | 'primary'
-    | 'link'
-    | 'info'
-    | 'success'
-    | 'warning'
-    | 'danger';
-  labelText?: string;
+interface Props {
+  inputProps: HTMLAttributes<HTMLInputElement>;
+  labelProps: HTMLAttributes<HTMLLabelElement>;
 }
-export const CheckBox = (props: Props) => {
-  const { color, labelText, ...rest } = props;
-  const className = `
-    form-ext-input
-    ${color ? `form-ext-input-${color}` : ''}
-  `;
+export const CheckBox = ({
+  inputProps: { className: inputClassName, ...inputProps },
+  labelProps: {
+    className: labelClassName,
+    children: labelChildren,
+    ...labelProps
+  },
+}: Props) => {
   const id = useId();
 
   return (
-    <div className='form-ext-control form-ext-checkbox'>
-      <input {...{ id, className, type: 'checkbox', ...rest }} />
-      {labelText ? (
-        <label className='form-ext-label' htmlFor={id}>
-          {labelText}
-        </label>
-      ) : null}
-    </div>
+    <>
+      <label {...{ className: labelClassName, htmlFor: id, ...labelProps }}>
+        {labelChildren}
+      </label>
+      <input
+        {...{ id, className: inputClassName, type: 'checkbox', ...inputProps }}
+      />
+    </>
   );
 };

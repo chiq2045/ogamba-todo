@@ -33,7 +33,7 @@ export const Flex = (props: Props) => {
     u-flex
     ${props.inline ? 'inline-flex' : ''}
     ${props.direction ? `u-flex-${props.direction}` : ''}
-    ${props.alignItems ? `u-align-${props.alignItems}` : ''}
+    ${props.alignItems ? `u-items-${props.alignItems}` : ''}
     ${props.justifyContent ? `u-justify-${props.justifyContent}` : ''}
     ${props.flexGrow ? `u-flex-grow-${props.flexGrow}` : ''}
     ${props.flexShrink ? `u-flex-shrink-${props.flexShrink}` : ''}
