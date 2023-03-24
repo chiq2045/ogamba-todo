@@ -13,11 +13,7 @@
     "skipLibCheck": true,
     "strict": true,
     "resolveJsonModule": true,
-    "noFallthroughCasesInSwitch": true,
-    "baseUrl": ".",
-    "paths": {
-      "~*": ["./*"]
-    }
+    "noFallthroughCasesInSwitch": true
   },
   "include": ["src/**/*", "types/**/*"],
   "exclude": ["dist"]

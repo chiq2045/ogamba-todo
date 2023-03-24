@@ -11,3 +11,13 @@
   width: 1px !important;
   white-space: nowrap !important; /* 3 */
 }
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+.main-container {
+  height: 100%;
+}
