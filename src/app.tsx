@@ -17,11 +17,19 @@ export const App = () => {
 
   return (
     <div className='bg-gray-100 u-center h-100p'>
-      <div className='card u-round-md' style={{ width: 350, minHeight: 500 }}>
+      <div
+        className='card u-round-md border-green-500 u-border-2'
+        style={{
+          width: 350,
+          minHeight: 500,
+          maxHeight: '90%',
+          overflow: 'scroll',
+        }}
+      >
         <div className='content'>
           <div className='p-2'>
             <div className='u-inline-flex u-items-center u-space-between u-flex-nowrap u-gap-2'>
-              <h1 className='text-xl'>Todos</h1>
+              <h1 className='text-xl'>TooDoos</h1>
               {loading ? <p className='text-xl'>Loading...</p> : null}
             </div>
             <ul className='no-bullets'>
