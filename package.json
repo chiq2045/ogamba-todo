@@ -6,8 +6,10 @@
     "@parcel/core": "^2.8.3",
     "cirrus-ui": "^0.7.1",
     "miragejs": "^0.1.47",
+    "nanoid": "^4.0.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.43.7"
   },
   "devDependencies": {
     "@babel/cli": "^7.21.0",

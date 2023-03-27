@@ -1,6 +1,7 @@
 import { createServer, Factory, Model, Registry } from 'miragejs';
 import { ModelDefinition } from 'miragejs/-types';
 import Schema from 'miragejs/orm/schema';
+import { nanoid } from 'nanoid';
 import { Todo } from '../../types';
 
 const TodoModel: ModelDefinition<Todo> = Model.extend({});
@@ -9,8 +10,8 @@ const models = {
 };
 
 const todoFactory = Factory.extend<Todo>({
-  id(n) {
-    return n.toString();
+  id() {
+    return nanoid();
   },
   title(n) {
     return `Todo ${n}`;
@@ -40,9 +41,9 @@ export default function () {
       server.create('todo', { title: 'Message Jeff and Trent about USCIS' });
     },
     routes() {
-      this.get('/api/todos', (schema: AppSchema) => {
-        return schema.all('todo');
-      });
+      this.get('/api/todos');
+      this.post('/api/todos');
+      this.delete('/api/todos/:id');
     },
   });
 }
