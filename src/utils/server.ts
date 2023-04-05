@@ -1,8 +1,8 @@
-import { createServer, Factory, Model, Registry } from 'miragejs';
+import { createServer, Factory, Model } from 'miragejs';
 import { ModelDefinition } from 'miragejs/-types';
-import Schema from 'miragejs/orm/schema';
 import { nanoid } from 'nanoid';
 import { Todo } from '../../types';
+import { apiUrl } from './constants';
 
 const TodoModel: ModelDefinition<Todo> = Model.extend({});
 const models = {
@@ -16,16 +16,10 @@ const todoFactory = Factory.extend<Todo>({
   title(n) {
     return `Todo ${n}`;
   },
-  completed: false,
-  moreInfo(n) {
-    return n % 2 === 1 ? 'More info about todo' : '';
-  },
 });
 const factories = {
   todo: todoFactory,
 };
-
-type AppSchema = Schema<Registry<typeof models, typeof factories>>;
 
 export default function () {
   return createServer({
@@ -33,17 +27,12 @@ export default function () {
     factories,
     seeds(server) {
       server.create('todo', { title: 'Move WiFi to new place' });
-      server.create('todo', {
-        title: 'Message Jeff and Trent about address',
-        moreInfo:
-          'Do we pay electricity bill for 585B too? How are they differentiated?',
-      });
+      server.create('todo', { title: 'Message Jeff and Trent about address' });
       server.create('todo', { title: 'Message Jeff and Trent about USCIS' });
     },
     routes() {
-      this.get('/api/todos');
-      this.post('/api/todos');
-      this.delete('/api/todos/:id');
+      this.get(apiUrl);
+      this.delete(`${apiUrl}/:id`);
     },
   });
 }

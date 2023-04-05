@@ -1,29 +1,33 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Todo } from '../types';
-import { AddTodoModal } from './components/add-todo-modal';
 import { TodoTile } from './components/todo-tile';
+import { apiUrl } from './utils/constants';
 
 export const App = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
-  const [addTodo, setAddTodo] = useState(false);
 
-  const handleAddTodo = () => {
-    setAddTodo((add) => !add);
-  };
+  const getTodos = useCallback(async () => {
+    return fetch(apiUrl)
+      .then((res) => res.json())
+      .then((data) => setTodos(data.todos))
+      .catch((err) => console.error(err));
+  }, []);
 
-  const updateTodos = (newTodo: Todo) => {
-    setTodos((oldTodos) => [...oldTodos, newTodo]);
+  const deleteTodo = (id: Todo['id']) => {
+    setLoading(true);
+    fetch(`${apiUrl}/${id}`, {
+      method: 'delete',
+    })
+      .then(getTodos)
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
     setLoading(true);
-    fetch('/api/todos')
-      .then((res) => res.json())
-      .then((data) => setTodos(data.todos))
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
-  }, []);
+    getTodos().finally(() => setLoading(false));
+  }, [getTodos]);
 
   return (
     <div className='bg-gray-100 u-center h-100p'>
@@ -41,31 +45,22 @@ export const App = () => {
               <h1 className='text-xl'>TooDoos</h1>
               {loading ? <p className='text-xl'>Loading...</p> : null}
             </div>
-            <div className='u-flex u-justify-flex-end u-gap-1'>
-              <button
-                className='btn'
-                onClick={() => {
-                  handleAddTodo();
-                  window.location.href = '/#add-todo-modal';
-                }}
-              >
-                Add Todo
-              </button>
-            </div>
             <ul className='no-bullets'>
               {todos.length === 0 ? (
                 <li className='text-gray-600'>No todos!</li>
               ) : null}
-              {todos.map((todo, index) => (
+              {todos.map((todo) => (
                 <li key={todo.id}>
-                  <TodoTile todo={todo} lastTodo={index === todos.length - 1} />
+                  <TodoTile
+                    todo={todo}
+                    handleDelete={() => deleteTodo(todo.id)}
+                  />
                 </li>
               ))}
             </ul>
           </div>
         </div>
       </div>
-      <AddTodoModal updateTodos={updateTodos} onClose={handleAddTodo} />
     </div>
   );
 };
