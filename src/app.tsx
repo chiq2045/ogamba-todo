@@ -7,12 +7,12 @@ import { useDebounce } from 'usehooks-ts';
 export const App = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
-  const [newTodoTitle, setNewTodoTitle] = useState('');
+  const [todoTitle, setTodoTitle] = useState('');
 
-  const debouncedNewTodoTitle = useDebounce(newTodoTitle);
+  const debouncedTodoTitle = useDebounce(todoTitle);
 
-  const handleNewTodoTitleChange: ChangeEventHandler<HTMLInputElement> = (e) =>
-    setNewTodoTitle(e.target.value);
+  const handleTodoTitleChange: ChangeEventHandler<HTMLInputElement> = (e) =>
+    setTodoTitle(e.target.value);
 
   const getTodos = useCallback(async () => {
     return fetch(apiUrl)
@@ -26,7 +26,7 @@ export const App = () => {
     fetch(`${apiUrl}/${id}`, {
       method: 'delete',
     })
-      .then(getTodos)
+      .then(() => setTodos((t) => t.filter((v) => v.id !== id)))
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
   };
@@ -35,11 +35,15 @@ export const App = () => {
     setLoading(true);
     fetch(apiUrl, {
       method: 'post',
-      body: JSON.stringify({ title: debouncedNewTodoTitle }),
+      body: JSON.stringify({ title: debouncedTodoTitle }),
     })
-      .then(getTodos)
+      .then((res) => res.json())
+      .then((data: { todo: Todo }) => setTodos((v) => [...v, data.todo]))
       .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setTodoTitle('');
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -72,8 +76,8 @@ export const App = () => {
               </label>
               <input
                 className='form-group-input'
-                value={newTodoTitle}
-                onChange={handleNewTodoTitleChange}
+                value={todoTitle}
+                onChange={handleTodoTitleChange}
               />
               <button className='form-group-btn' onClick={addTodo}>
                 Add
