@@ -1,5 +1,6 @@
 import { createServer, Factory, Model } from 'miragejs';
-import { ModelDefinition } from 'miragejs/-types';
+import { ModelDefinition, Registry } from 'miragejs/-types';
+import Schema from 'miragejs/orm/schema';
 import { nanoid } from 'nanoid';
 import { Todo } from '../../types';
 import { apiUrl } from './constants';
@@ -21,6 +22,8 @@ const factories = {
   todo: todoFactory,
 };
 
+type AppSchema = Schema<Registry<typeof models, typeof factories>>;
+
 export default function () {
   return createServer({
     models,
@@ -33,6 +36,11 @@ export default function () {
     routes() {
       this.get(apiUrl);
       this.delete(`${apiUrl}/:id`);
+      this.post(apiUrl, (schema: AppSchema, request) => {
+        const { title } = JSON.parse(request.requestBody);
+        console.log(title);
+        return schema.create('todo', { id: nanoid(), title });
+      });
     },
   });
 }

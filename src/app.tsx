@@ -1,11 +1,18 @@
-import { useCallback, useEffect, useState } from 'react';
+import { ChangeEventHandler, useCallback, useEffect, useState } from 'react';
 import { Todo } from '../types';
 import { TodoTile } from './components/todo-tile';
 import { apiUrl } from './utils/constants';
+import { useDebounce } from 'usehooks-ts';
 
 export const App = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(false);
+  const [newTodoTitle, setNewTodoTitle] = useState('');
+
+  const debouncedNewTodoTitle = useDebounce(newTodoTitle);
+
+  const handleNewTodoTitleChange: ChangeEventHandler<HTMLInputElement> = (e) =>
+    setNewTodoTitle(e.target.value);
 
   const getTodos = useCallback(async () => {
     return fetch(apiUrl)
@@ -18,6 +25,17 @@ export const App = () => {
     setLoading(true);
     fetch(`${apiUrl}/${id}`, {
       method: 'delete',
+    })
+      .then(getTodos)
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
+  };
+
+  const addTodo = () => {
+    setLoading(true);
+    fetch(apiUrl, {
+      method: 'post',
+      body: JSON.stringify({ title: debouncedNewTodoTitle }),
     })
       .then(getTodos)
       .catch((err) => console.error(err))
@@ -44,6 +62,22 @@ export const App = () => {
             <div className='u-inline-flex u-items-center u-space-between u-flex-nowrap u-gap-2'>
               <h1 className='text-xl'>TooDoos</h1>
               {loading ? <p className='text-xl'>Loading...</p> : null}
+            </div>
+            <div className='form-group'>
+              <label
+                className='form-group-label'
+                style={{ whiteSpace: 'nowrap' }}
+              >
+                New Todo
+              </label>
+              <input
+                className='form-group-input'
+                value={newTodoTitle}
+                onChange={handleNewTodoTitleChange}
+              />
+              <button className='form-group-btn' onClick={addTodo}>
+                Add
+              </button>
             </div>
             <ul className='no-bullets'>
               {todos.length === 0 ? (
