@@ -1,12 +1,10 @@
-import { ChangeEventHandler, useCallback, useEffect, useState } from 'react';
-import { Todo } from '../types';
+import { ChangeEventHandler, useState } from 'react';
 import { TodoTile } from './components/todo-tile';
-import { apiUrl } from './utils/constants';
 import { useDebounce } from 'usehooks-ts';
+import { useTodos } from './utils/hooks';
 
 export const App = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(false);
+  const { todos, loading, addTodo, deleteTodo } = useTodos();
   const [todoTitle, setTodoTitle] = useState('');
 
   const debouncedTodoTitle = useDebounce(todoTitle);
@@ -14,42 +12,9 @@ export const App = () => {
   const handleTodoTitleChange: ChangeEventHandler<HTMLInputElement> = (e) =>
     setTodoTitle(e.target.value);
 
-  const getTodos = useCallback(async () => {
-    return fetch(apiUrl)
-      .then((res) => res.json())
-      .then((data) => setTodos(data.todos))
-      .catch((err) => console.error(err));
-  }, []);
-
-  const deleteTodo = (id: Todo['id']) => {
-    setLoading(true);
-    fetch(`${apiUrl}/${id}`, {
-      method: 'delete',
-    })
-      .then(() => setTodos((t) => t.filter((v) => v.id !== id)))
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
+  const handleAddTodo = () => {
+    addTodo({ title: debouncedTodoTitle });
   };
-
-  const addTodo = () => {
-    setLoading(true);
-    fetch(apiUrl, {
-      method: 'post',
-      body: JSON.stringify({ title: debouncedTodoTitle }),
-    })
-      .then((res) => res.json())
-      .then((data: { todo: Todo }) => setTodos((v) => [...v, data.todo]))
-      .catch((err) => console.error(err))
-      .finally(() => {
-        setTodoTitle('');
-        setLoading(false);
-      });
-  };
-
-  useEffect(() => {
-    setLoading(true);
-    getTodos().finally(() => setLoading(false));
-  }, [getTodos]);
 
   return (
     <div className='bg-gray-100 u-center h-100p'>
@@ -79,20 +44,17 @@ export const App = () => {
                 value={todoTitle}
                 onChange={handleTodoTitleChange}
               />
-              <button className='form-group-btn' onClick={addTodo}>
+              <button className='form-group-btn' onClick={handleAddTodo}>
                 Add
               </button>
             </div>
             <ul className='no-bullets'>
-              {todos.length === 0 ? (
+              {todos.size === 0 ? (
                 <li className='text-gray-600'>No todos!</li>
               ) : null}
-              {todos.map((todo) => (
-                <li key={todo.id}>
-                  <TodoTile
-                    todo={todo}
-                    handleDelete={() => deleteTodo(todo.id)}
-                  />
+              {[...todos].map(([id, todo]) => (
+                <li key={id}>
+                  <TodoTile todo={todo} handleDelete={() => deleteTodo(id)} />
                 </li>
               ))}
             </ul>
