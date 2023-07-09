@@ -1,4 +1,4 @@
 export type Todo = {
-  id: string;
-  title: string;
-};
+  id: string
+  title: string
+}
